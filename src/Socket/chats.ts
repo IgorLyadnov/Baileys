@@ -41,6 +41,13 @@ export const makeChatsSocket = (config: SocketConfig) => {
 		const { [keyId]: key } = await authState.keys.get('app-state-sync-key', [keyId])
 		return key
 	}
+	
+	
+	const setLabels = async(jid: string, label_set: boolean, id_set: number) => {
+
+		await chatModify({labeled:label_set, id: id_set}, jid)
+
+	}
 
 	const fetchPrivacySettings = async(force: boolean = false) => {
 		if(!privacySettings || force) {
@@ -843,6 +850,7 @@ export const makeChatsSocket = (config: SocketConfig) => {
 
 	return {
 		...sock,
+		setLabels,
 		processingMutex,
 		fetchPrivacySettings,
 		upsertMessage,
