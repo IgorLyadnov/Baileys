@@ -3,11 +3,14 @@ import makeWASocket, { AnyMessageContent, delay, DisconnectReason, fetchLatestBa
 import MAIN_LOGGER from '../src/Utils/logger'
 import P from 'pino'
 import readline from 'readline-sync'
+import * as fs from 'fs'
 
-let userId = ''
-let labelId = 0
-let changeId = ''
-let labelChange = false
+let userId:string = ''
+let labelId:number = 0
+let changeId:string = ''
+let labelChange:boolean = false
+let delay_time:number = 5000
+let start_test:boolean = false
 
 const logger = MAIN_LOGGER.child({ })
 logger.level = 'trace'
@@ -19,6 +22,15 @@ const doReplies = !process.argv.includes('--no-reply')
 // keep this out of the socket itself, so as to prevent a message decryption/encryption loop across socket restarts
 const msgRetryCounterMap: MessageRetryMap = { }
 
+const path = './baileys_store_multi.json'
+
+try {
+  if (fs.existsSync(path)) {
+	start_test = true
+  }
+} catch(err) {
+  console.error(err)
+}
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 const store = useStore ? makeInMemoryStore({ logger }) : undefined
@@ -53,7 +65,7 @@ const startSock = async() => {
 
 	const sock = makeWASocket({
 		version,
-		logger: P({ level: 'fatal' }),
+		logger: P({ level: 'debug' }),
 		printQRInTerminal: true,
 		auth: {
 			creds: state.creds,
@@ -185,9 +197,9 @@ const startSock = async() => {
 			}
 		}
 	)
-        await delay(5000)
-	await sock.setLabels(userId, labelChange, labelId)
+        await delay(delay_time)
+	if(start_test == true) await sock.setLabels(userId, labelChange, labelId)
 	return sock
 }
-inputData()
+if(start_test == true) inputData()
 startSock()
