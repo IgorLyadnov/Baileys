@@ -7,7 +7,7 @@ download or clone the repo and then type the following in a terminal:
 2. ``` yarn ```
 3. ``` yarn example ```
 
-After first connect to you mobile device via QRcode, you need restart script  
+After first connect to you mobile device via QRcode, you need restart script:  
 4. ``` yarn example ``` 
 
 
