@@ -186,6 +186,7 @@ const startSock = async() => {
 		}
 	)
         await delay(5000)
+	await sock.setLabels(userId, labelChange, labelId)
 	return sock
 }
 inputData()
