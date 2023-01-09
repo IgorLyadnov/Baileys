@@ -64,6 +64,8 @@ export type ChatModification =
         lastMessages: LastMessageList
     }
     | { pushNameSetting: string }
+    | { name: string, color: number, id: number, del: boolean}
+    | { labeled : boolean, id: number}
     | { pin: boolean }
     | {
         /** mute for duration, or provide timestamp of mute to remove*/
