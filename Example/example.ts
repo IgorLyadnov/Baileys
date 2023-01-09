@@ -1,6 +1,13 @@
 import { Boom } from '@hapi/boom'
 import makeWASocket, { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, isJidBroadcast, makeCacheableSignalKeyStore, makeInMemoryStore, MessageRetryMap, useMultiFileAuthState } from '../src'
 import MAIN_LOGGER from '../src/Utils/logger'
+import P from 'pino'
+import readline from 'readline-sync'
+
+let userId = ''
+let labelId = 0
+let changeId = ''
+let labelChange = false
 
 const logger = MAIN_LOGGER.child({ })
 logger.level = 'trace'
@@ -21,6 +28,22 @@ setInterval(() => {
 	store?.writeToFile('./baileys_store_multi.json')
 }, 10_000)
 
+//input test data
+const inputData = async() => {
+	userId = readline.question('\nPlease, input telephone like this 71234567890\n')
+	userId = userId+'@s.whatsapp.net'
+	console.log("ID пользователя ",  userId)
+	labelId = Number(readline.question('\nPlease, input number of label from 1 to 5\n'))
+	console.log("Label # ", labelId)
+	changeId = readline.question('\nPlease, input 1 for marked label, any key for unmarked\n')
+    if (changeId == '1'){
+		labelChange = true
+	}else{
+		labelChange = false
+	}
+	console.log("Will marked? ", labelChange)
+}
+
 // start a connection
 const startSock = async() => {
 	const { state, saveCreds } = await useMultiFileAuthState('baileys_auth_info')
@@ -30,7 +53,7 @@ const startSock = async() => {
 
 	const sock = makeWASocket({
 		version,
-		logger,
+		logger: P({ level: 'fatal' }),
 		printQRInTerminal: true,
 		auth: {
 			creds: state.creds,
@@ -162,8 +185,8 @@ const startSock = async() => {
 			}
 		}
 	)
-
+        await delay(5000)
 	return sock
 }
-
+inputData()
 startSock()
