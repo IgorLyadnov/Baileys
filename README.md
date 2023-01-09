@@ -1,4 +1,13 @@
 # Baileys - Typescript/Javascript WhatsApp Web API
+
+For check my job, please, make next steps:
+
+download or clone the repo and then type the following in a terminal:
+1. ``` cd path/to/Baileys ```
+2. ``` yarn ```
+3. ``` yarn example ```
+
+
  
  Baileys does not require Selenium or any other browser to be interface with WhatsApp Web, it does so directly using a **WebSocket**. Not running Selenium or Chromimum saves you like **half a gig** of ram :/ 
 
